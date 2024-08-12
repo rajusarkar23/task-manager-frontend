@@ -9,20 +9,14 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
-import {
-  InputOTP,
-  InputOTPGroup,
-  InputOTPSeparator,
-  InputOTPSlot,
-} from "@/components/ui/input-otp";
-import { log } from "console";
-import Link from "next/link";
-import React, { useState } from "react";
+
+import React, { useRef, useState } from "react";
 
 const Signup = () => {
   const [formData, setFormData] = useState({});
   const [otpData, setOtpData] = useState({});
-  console.log(formData);
+  const btnRef = useRef<HTMLButtonElement>(null);
+  // console.log(formData);
 
   const handleOnChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData({
@@ -37,7 +31,7 @@ const Signup = () => {
       [e.target.id]: e.target.value,
     });
   };
-  console.log(otpData);
+  // console.log(otpData);
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
@@ -98,22 +92,32 @@ const Signup = () => {
           className="mt-2 text-black"
           onChange={handleOnChange}
         ></Input>
-        <Button className="bg-blue-600 hover:bg-blue-800 mt-2 items-center">
-          <Dialog>
-            <DialogTrigger>Open</DialogTrigger>
-            <DialogContent>
-              <DialogHeader>
-                <DialogTitle className="text-black">
-                  Are you absolutely sure?
-                </DialogTitle>
-                <DialogDescription>
-                  <Input placeholder="enter otp" id="otp" onChange={handleOtpChange}></Input>
-                </DialogDescription>
-                <Button onClick={handleOtpVerification}>Ok</Button>
-              </DialogHeader>
-            </DialogContent>
-          </Dialog>
-        </Button>
+        <Button ref={btnRef} className="hidden"></Button>
+        <Dialog>
+          <DialogTrigger
+            onClick={() => btnRef.current?.click()}
+            className="bg-blue-600 mt-3 px-3 py-1 rounded font-bold hover:bg-blue-700 transition"
+          >
+            Signup
+          </DialogTrigger>
+
+          <DialogContent>
+            <DialogHeader>
+              <DialogTitle className="text-black flex justify-center">
+                Please verify your email by entering OTP
+              </DialogTitle>
+              <DialogDescription className="flex justify-center">
+                <Input
+                  className="text-center text-2xl font-bold"
+                  
+                  id="otp"
+                  onChange={handleOtpChange}
+                ></Input>
+              </DialogDescription>
+              <Button onClick={handleOtpVerification}>Verify</Button>
+            </DialogHeader>
+          </DialogContent>
+        </Dialog>
       </form>
     </div>
   );
