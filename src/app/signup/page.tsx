@@ -15,12 +15,13 @@ import {
   InputOTPSeparator,
   InputOTPSlot,
 } from "@/components/ui/input-otp";
+import { log } from "console";
 import Link from "next/link";
 import React, { useState } from "react";
 
 const Signup = () => {
   const [formData, setFormData] = useState({});
-  const [otpData, setOtpData]= useState({})
+  const [otpData, setOtpData] = useState({});
   console.log(formData);
 
   const handleOnChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -29,16 +30,14 @@ const Signup = () => {
       [e.target.id]: e.target.value,
     });
   };
-  console.log(otpData);
-  
 
   const handleOtpChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-      setOtpData({
-        ...otpData,
-        [e.target.id]: e.target.value
-      })
-  }
-
+    setOtpData({
+      ...otpData,
+      [e.target.id]: e.target.value,
+    });
+  };
+  console.log(otpData);
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
@@ -59,23 +58,21 @@ const Signup = () => {
   };
 
   const handleOtpVerification = async () => {
-   
-   try {
-     const res = await fetch("http://localhost:3333/api/v1/user/verify", {
-       method: "POST",
-       headers: {
-         "Content-Type": "application/json"
-       },
-       body: JSON.stringify(otpData),
-       credentials: "include"
-     })
-     const response = await res.json()
-     console.log(response);
-     
-   } catch (error) {
-    return error
-   }
-  }
+    try {
+      const res = await fetch("http://localhost:3333/api/v1/user/verify", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(otpData),
+        credentials: "include",
+      });
+      const response = await res.json();
+      console.log(response);
+    } catch (error) {
+      return error;
+    }
+  };
 
   return (
     <div className="flex justify-center mt-4">
@@ -110,24 +107,11 @@ const Signup = () => {
                   Are you absolutely sure?
                 </DialogTitle>
                 <DialogDescription>
-                  <InputOTP maxLength={6}>
-                    <InputOTPGroup>
-                      <InputOTPSlot onChange={handleOtpChange} id="otp" index={0} />
-                      <InputOTPSlot onChange={handleOtpChange} id="otp" index={1} />
-                      <InputOTPSlot onChange={handleOtpChange} id="otp" index={2} />
-                    </InputOTPGroup>
-                    <InputOTPSeparator />
-                    <InputOTPGroup>
-                      <InputOTPSlot onChange={handleOtpChange} id="otp" index={3} />
-                      <InputOTPSlot onChange={handleOtpChange} id="otp" index={4} />
-                      <InputOTPSlot onChange={handleOtpChange} id="otp" index={5} />
-                    </InputOTPGroup>
-                  </InputOTP>
+                  <Input placeholder="enter otp" id="otp" onChange={handleOtpChange}></Input>
                 </DialogDescription>
-                 <Button onClick={handleOtpVerification}>Ok</Button>
+                <Button onClick={handleOtpVerification}>Ok</Button>
               </DialogHeader>
             </DialogContent>
-           
           </Dialog>
         </Button>
       </form>
